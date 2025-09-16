@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Alpenstrandläufer</string>
+    <string name="app_name_long">Airplane Mode Tracker</string>
+    <string name="app_description">Tracking airplane mode changes</string>
+    <string name="fab1">toggle airplane mode</string>
+    <string name="double_tab_to_delete_an_entry">Double tab to delete an entry.</string>
+    <string name="duration_hh_mm_ss">Duration: hh:mm:ss</string>
+</resources>
