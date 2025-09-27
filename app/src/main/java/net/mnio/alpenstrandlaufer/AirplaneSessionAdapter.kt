@@ -64,7 +64,7 @@ class AirplaneSessionAdapter(
         circleDrawable.shape = GradientDrawable.OVAL
         circleView.background = circleDrawable
 
-        if (position >= sessions.size) {
+        if (position >= sessions.size) { // virtual, always visible item with demo/help content
             circleDrawable.setColor(Color.TRANSPARENT)
             val context = holder.itemView.context
             holder.title.text = context.getString(R.string.duration_hh_mm_ss)
@@ -74,6 +74,7 @@ class AirplaneSessionAdapter(
             holder.root.isFocusable = false
             return;
         }
+
         val session = sessions[position]
         circleDrawable.setColor(calculateColorForSession(session))
         holder.title.text = buildString {
@@ -111,8 +112,9 @@ class AirplaneSessionAdapter(
 //        val hour6 = AirplaneSession(0, 21606000)
 //        val hour5 = AirplaneSession(0, 18005000)
 //        sessions = newSessions + listOf(hours8, hour7, hour6, hour5)
+        sessions = newSessions
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = sessions.size + 1
+    override fun getItemCount(): Int = sessions.size + 1 // adding one virtual item
 }
