@@ -52,7 +52,6 @@ class AirplaneSessionAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SessionViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_airplane_session, parent, false)
@@ -60,7 +59,7 @@ class AirplaneSessionAdapter(
     }
 
     override fun onBindViewHolder(holder: SessionViewHolder, position: Int) {
-        val circleView = holder.circle // reference to your circle View in ViewHolder
+        val circleView = holder.circle
         val circleDrawable = GradientDrawable()
         circleDrawable.shape = GradientDrawable.OVAL
         circleView.background = circleDrawable
@@ -94,11 +93,11 @@ class AirplaneSessionAdapter(
     }
 
     private fun calculateColorForSession(session: AirplaneSession): Int {
-        if (session.durationHours > 8) {
+        if (session.durationHours >= 8) {
             return 0xFF388E3C.toInt() // Color.GREEN
-        } else if (session.durationHours > 7) {
+        } else if (session.durationHours >= 7) {
             return 0xFFFBC02D.toInt() // Color.YELLOW
-        } else if (session.durationHours > 6) {
+        } else if (session.durationHours >= 6) {
             return 0xFFD32F2F.toInt() // Color.RED
         }
         return Color.TRANSPARENT
@@ -106,8 +105,13 @@ class AirplaneSessionAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newSessions: List<AirplaneSession>) {
-        sessions = newSessions
-        notifyDataSetChanged() // redraws the whole list
+//        simple mock data for testing colors
+//        val hours8 = AirplaneSession(0, 28808000)
+//        val hour7 = AirplaneSession(0, 25207000)
+//        val hour6 = AirplaneSession(0, 21606000)
+//        val hour5 = AirplaneSession(0, 18005000)
+//        sessions = newSessions + listOf(hours8, hour7, hour6, hour5)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = sessions.size + 1
