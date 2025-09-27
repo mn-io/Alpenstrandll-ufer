@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 
 private const val NOTIFICATION_CHANNEL = "airplane_channel"
@@ -39,6 +40,7 @@ class AirplaneModeService : Service() {
             .build()
 
         startForeground(1, notification)
+        Log.d("App", "Foreground service started")
     }
 
     override fun onDestroy() {

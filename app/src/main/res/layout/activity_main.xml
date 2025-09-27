@@ -27,7 +27,7 @@
         android:id="@+id/fab1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/fab1"
+        android:contentDescription="@string/button_airplane_mode_toggle_text"
         app:srcCompat="@drawable/ic_airplanemode"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -2,7 +2,9 @@
     <string name="app_name">Alpenstrandläufer</string>
     <string name="app_name_long">Airplane Mode Tracker</string>
     <string name="app_description">Tracking airplane mode changes</string>
-    <string name="fab1">toggle airplane mode</string>
+    <string name="button_airplane_mode_toggle_text">toggle airplane mode</string>
     <string name="double_tab_to_delete_an_entry">Double tab to delete an entry.</string>
     <string name="duration_hh_mm_ss">Duration: hh:mm:ss</string>
+    <string name="airplane_mode_enabled">Airplane mode enabled</string>
+    <string name="no_permission_to_change_airplane_mode">No permission to change airplane mode</string>
 </resources>

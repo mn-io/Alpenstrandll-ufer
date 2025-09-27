@@ -1,9 +1,6 @@
 package net.mnio.alpenstrandlaufer
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -16,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -35,9 +31,11 @@ class MainActivity : AppCompatActivity() {
         val hasPermission = checkCallingOrSelfPermission(
             android.Manifest.permission.WRITE_SECURE_SETTINGS
         ) == PackageManager.PERMISSION_GRANTED
-
         if (!hasPermission) {
-            Toast.makeText(this, "No permission to change airplane mode", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                this,
+                getString(R.string.no_permission_to_change_airplane_mode), Toast.LENGTH_SHORT
+            )
                 .show()
             startActivity(Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS))
         } else {
@@ -52,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("AirplaneMode", "No permission: ${se.message}")
                 Toast.makeText(
                     this,
-                    "No permission to change airplane mode (error)",
+                    getString(R.string.no_permission_to_change_airplane_mode) + " (error)",
                     Toast.LENGTH_SHORT
                 ).show()
                 startActivity(Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS))
@@ -61,16 +59,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val onDoubleTap: (AirplaneSession) -> Unit = { session ->
-        // Double-tap callback: delete from DB and reload
         lifecycleScope.launch(Dispatchers.IO) {
             val dao = AppDatabase.getDatabase(this@MainActivity).sessionDao()
             dao.delete(session)
-            loadSessions()
-        }
-    }
-
-    private val reloadReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
             loadSessions()
         }
     }
@@ -81,6 +72,8 @@ class MainActivity : AppCompatActivity() {
         initView()
         loadSessions()
         startService()
+
+        Log.d("App", "onCreate finished")
     }
 
     private fun initRootView() {
@@ -113,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             val dao = AppDatabase.getDatabase(this@MainActivity).sessionDao()
             val sessions = dao.getAll()
-
+            Log.d("App", "Reloading sessions; recorded sessions count: ${sessions.size}")
             withContext(Dispatchers.Main) {
                 (recyclerView.adapter as? AirplaneSessionAdapter)?.updateData(sessions)
             }
@@ -122,21 +115,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("App", "onResume")
         loadSessions()
-        LocalBroadcastManager.getInstance(this)
-            .registerReceiver(reloadReceiver, IntentFilter(ACTION_RELOAD_SESSION_INTENT_NAME))
     }
 
-    override fun onPause() {
-        super.onPause()
-        LocalBroadcastManager.getInstance(this)
-            .unregisterReceiver(reloadReceiver)
-    }
     private fun startService() {
         val intent = Intent(this, AirplaneModeService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d("App", "Start foreground service")
             startForegroundService(intent)
         } else {
+            Log.d("App", "Start foreground service (legacy)")
             startService(intent)
         }
     }
